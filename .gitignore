@@ -1,0 +1,11 @@
+# Ignore ASP .NET files
+bin
+obj
+*.csproj.user
+*.suo
+*.cache
+*.pdb
+*.dll
+*.exe
+.vscode
+
