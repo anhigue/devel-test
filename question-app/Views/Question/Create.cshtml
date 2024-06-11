@@ -1,0 +1,50 @@
+<section class="container w-100 p-3">
+    <h1 class="text-center">@ViewData["Title"]</h1>
+</section>
+<section id="survay-head" class="container p-3" data-step="1">
+    @* Header of the questionary  *@
+    @* - Name *@
+    @* - Description *@
+    <div class="row m-2">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="survay-title" name="name" />
+            <span class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="survay-description" name="description"></textarea>
+            <span class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="d-flex justify-content-end">
+            <button id="next-button" type="button" class="btn btn-primary">Next</button>
+        </div>
+    </div>
+</section>
+<section id="survay-body" class="container" data-step="2" style="display: none;">
+    @* list group of questions where we include the following properties *@
+    @* - Question *@
+    @* - Type *@
+    @* - Required *@
+    @* - Display question *@
+    @* - Actions *@
+    <div class="row m-2">
+        <div class="d-flex justify-content-end">
+            <button id="add-question" type="button" class="btn btn-primary">Add question</button>
+        </div>
+        
+    </div>
+    <div id="question-list" class="row m-2" style="min-height: 150px;">
+    </div>
+    <div class="row">
+        <div class="d-flex justify-content-end">
+            <button id="prev-button" type="button" class="btn btn-primary btn-sm p-2">Previous</button>
+            <button id="save-button" type="button" class="btn btn-success btn-sm p-2">Save</button>
+        </div>
+    </div>
+</section>
+<script src="~/js/stepper-create.js" asp-append-version="true"></script>
