@@ -108,13 +108,13 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="row">
                 <div class="col-5">
                     <div class="form-group">
-                        <label for="title-1">Name</label>
+                        <label for="title-${index}">Question</label>
                         <input type="text" class="form-control" name="title-${index}" />
                     </div>
                 </div>
                 <div class="col-3">
                     <div class="form-group">
-                        <label for="type-1">Type</label>
+                        <label for="type-${index}">Type</label>
                         <select class="form-control custom-select custom-select-sm" id="type-${index}">
                             <option value="text" selected>Text</option>
                             <option value="number">Number</option>
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="col-2 align-content-center pt-4">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="is-required-${index}">
-                        <label class="form-check-label" for="is-required-1">
+                        <label class="form-check-label" for="is-required-${index}">
                             Is required?
                         </label>
                     </div>
@@ -188,14 +188,23 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-    const url = `/api/survay/create`;
+    const url = `/api/survey/create`;
     const data = {
       survayTitle: survayTitle,
       survayDescription: survayDescription || '',
       questions: questions,
     };
 
-    console.log(data, 'data');
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then( response => response.json())
+      .then( body => console.log(body))
+      .catch((error) => console.log(error));
   });
 });
 

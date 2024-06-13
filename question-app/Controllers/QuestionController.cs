@@ -10,12 +10,6 @@ public class QuestionController : Controller {
         return View();
     }
 
-    [HttpGet("Question/Details/{idQuestion}")]
-    public IActionResult Details(string idQuestion) {
-        ViewData["Title"] = ViewConstants.QUESTION_HOME + " - " + idQuestion;
-        return View();
-    }
-
     [HttpGet("Question/Preview/{idQuestion}")]
     public IActionResult Preview(string idQuestion) {
         ViewData["Title"] = ViewConstants.QUESTION_HOME + " - " + idQuestion;
@@ -24,12 +18,6 @@ public class QuestionController : Controller {
 
     public IActionResult Create() {
         ViewData["Title"] = ViewConstants.QUESTION_CREATE;
-        return View();
-    }
-
-    [HttpPut]
-    [Route("rest/edit")]
-    public IActionResult Edit() {
         return View();
     }
 }
