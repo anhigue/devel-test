@@ -1,9 +1,20 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using question_app.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+        {
+            // Optionally configure JSON options, e.g., to ignore case
+            // options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+            options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        });
+
+builder.Services.AddScoped<ISurvayRepository, SurvayRepository>();
 
 // Add DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>

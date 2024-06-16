@@ -200,10 +200,18 @@ document.addEventListener('DOMContentLoaded', function () {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data)
     })
-      .then( response => response.json())
-      .then( body => console.log(body))
+      .then( response => {
+        console.log(response);
+        if (response.status === 200) {
+          alert('Survey created successfully');
+          window.location.href = `/Question`;
+        } else {
+          return response.text().then((text) => {
+            throw new Error(text);
+          });
+      }})
       .catch((error) => console.log(error));
   });
 });

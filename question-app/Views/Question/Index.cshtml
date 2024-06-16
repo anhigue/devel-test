@@ -1,4 +1,8 @@
-﻿<section class="container p-3 m-3">
+﻿@{
+    var surveyList = ViewData["SurveyList"] as List<SurveyHeadModel>;
+}
+
+<section class="container p-3 m-3">
     <h1 class="text-center">@ViewData["Title"]</h1
 </section>
 <section class="container p-3 m-3">
@@ -28,15 +32,29 @@
                     <th>Actions</th>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Test Questionary</td>
-                        <td>Example.</td>
-                        <td>
-                            <a class="btn btn-secondary btn-sm" href="#">Copy link</a>
-                            <a class="btn btn-success btn-sm" href="#">Publish</a>
-                        </td>
-                    </tr>
+                    @if (surveyList != null)
+                    {
+                        for (int i = 0; i < surveyList.Count; i++)
+                        {
+                            <tr>
+                                <td>@(i + 1)</td>
+                                <td>@surveyList[i].title</td>
+                                <td>@surveyList[i].description</td>
+                                <td>
+                                    @* if is in_review show the copy link btn *@
+                                    @if (!surveyList[i].is_in_review)
+                                    {
+                                        <a class="btn btn-secondary btn-sm" data-survey-item-id="@surveyList[i].id">Copy link</a>
+                                    }
+
+                                    @if (surveyList[i].is_in_review)
+                                    {
+                                        <a class="btn btn-success btn-sm" href="@Url.Action("Publish", "Question", new { id = surveyList[i].id })">Publish</a>
+                                    }                                    
+                                </td>
+                            </tr>
+                        }
+                    }
                 </tbody>
             </table>
         </div>
