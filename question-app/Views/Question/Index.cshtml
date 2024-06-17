@@ -44,12 +44,11 @@
                                     @* if is in_review show the copy link btn *@
                                     @if (!surveyList[i].is_in_review)
                                     {
-                                        <a class="btn btn-secondary btn-sm" data-survey-item-id="@surveyList[i].id">Copy link</a>
+                                        <a class="btn btn-secondary btn-sm" onclick="copyLink(@surveyList[i].id)" data-survey-item-id="@surveyList[i].id">Copy link</a>
                                     }
-
                                     @if (surveyList[i].is_in_review)
                                     {
-                                        <a class="btn btn-success btn-sm" href="@Url.Action("Publish", "Question", new { id = surveyList[i].id })">Publish</a>
+                                        <a class="btn btn-success btn-sm" onclick="publishSurvey(@surveyList[i].id)">Publish</a>
                                     }                                    
                                 </td>
                             </tr>

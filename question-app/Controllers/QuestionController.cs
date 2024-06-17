@@ -38,4 +38,41 @@ public class QuestionController : Controller {
         ViewData["Title"] = ViewConstants.QUESTION_CREATE;
         return View();
     }
+
+    [HttpGet("Question/SurveyForm/{SurveyId}")]
+    public IActionResult SurveyForm(string SurveyId) {
+
+        var survay = new Models.SurveyHeadModel();
+            
+        try
+        {
+            // get the survay by id
+            survay = _survayRepository.GetSurvayById(int.Parse(SurveyId)).Result;
+
+            if (survay.id != 0)
+            {
+                // push the survay to the view
+                ViewData["Survey"] = survay;
+                ViewData["Title"] = survay.title;
+
+                // get the questions by survay id
+                var questions = _survayRepository.GetQuestionsBySurveyId(survay.id).Result;
+
+                if (questions.Count != 0)
+                {
+                    // push the questions to the view
+                    ViewData["Questions"] = questions;
+                } else {
+                    ViewData["Questions"] = null;
+                    ViewData["Message"] = "No questions found for this survey";
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+
+        return View(survay);
+    }
 }

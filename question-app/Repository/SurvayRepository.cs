@@ -7,8 +7,9 @@ public interface ISurvayRepository
 {
     Task<List<SurveyHeadModel>> GetSurvays();
     Task<SurveyHeadModel> GetSurvayById(int id);
-    Task<SurveyHeadModel> CreateSurvay(SurveyHeadModel survay);
     Task<bool> CreateSurveyWithQuestions(SurveyHeadModel survay, List<QuestionModel> questions);
+    Task<bool> publishSurvey(int survayId);
+    Task<List<QuestionModel>> GetQuestionsBySurveyId(int survayId);
 }
 
 public class SurvayRepository : ISurvayRepository
@@ -30,13 +31,6 @@ public class SurvayRepository : ISurvayRepository
         return await _context.Survays.FirstOrDefaultAsync(s => s.id == id) ?? new SurveyHeadModel();
     }
 
-    public async Task<SurveyHeadModel> CreateSurvay(SurveyHeadModel survay)
-    {
-        _context.Survays.Add(survay);
-        await _context.SaveChangesAsync();
-        return survay;
-    }
-
     public async Task<bool> CreateSurveyWithQuestions(SurveyHeadModel survay, List<QuestionModel> questions)
     {
 
@@ -47,6 +41,7 @@ public class SurvayRepository : ISurvayRepository
             survay.id = guid.GetHashCode();
             survay.created_at = DateTime.Now;
             survay.user_id = 1234;
+            survay.is_in_review = true;
 
             _context.Survays.Add(survay);
             _context.SaveChanges();
@@ -69,6 +64,52 @@ public class SurvayRepository : ISurvayRepository
         }
 
         return true;
+    }
+
+    public async Task<bool> publishSurvey(int survayId)
+    {
+        try
+        {
+            var survay = await _context.Survays.FirstOrDefaultAsync(s => s.id == survayId);
+
+            if (survay == null)
+            {
+                return false;
+            }
+
+            survay.is_in_review = false;
+
+            _context.Survays.Update(survay);
+            _context.SaveChanges();
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            return false;
+        }
+
+        return true;
+    }
+
+    public async Task<List<QuestionModel>> GetQuestionsBySurveyId(int survayId)
+    {
+        List<QuestionModel> questions = new List<QuestionModel>();
+        
+        try
+        {
+            questions = await _context.Questions.AsNoTracking().Where(
+                // use the survay id to get the questions
+                // use the absolute value of the hash code to get the id
+                q => Math.Abs(q.survey_id) == survayId
+            ).ToListAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+
+        return questions;
     }
 
 }

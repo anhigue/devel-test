@@ -81,9 +81,28 @@ public class SurvayApiController : Controller
     }
 
     [HttpPatch("publish/{id}")]
-    public IActionResult publishSurvay(string id)
+    public async Task<IActionResult> publishSurvay(string id)
     {
-        return Ok(id);
+
+        bool Result;
+
+        if (string.IsNullOrEmpty(id))
+        {
+            return BadRequest("Survey id is required");
+        }
+
+        try
+        {
+            int survayId = int.Parse(id);
+            Result = await _survayRepository.publishSurvey(survayId);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            return BadRequest("Failed to publish survey");
+        }
+
+        return Result ? Ok("Survey published successfully") : BadRequest("Failed to publish survey");
     }
 
 }
